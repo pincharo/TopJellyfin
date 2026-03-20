@@ -1,0 +1,13 @@
+---
+name: "TopJellyfin"
+guid: "a1b2c3d4-e5f6-7890-abcd-ef1234567890"
+version: "1.0.0.0"
+targetAbi: "10.10.0.0"
+framework: "net8.0"
+overview: "Secciones personalizadas de inicio con contenido reciente y trending de Trakt.tv"
+description: "TopJellyfin añade cuatro secciones personalizadas a la pantalla de inicio de Jellyfin: Recientemente estrenado en Películas, Recientemente estrenado en Series, Top Películas y Top Series (desde Trakt.tv)."
+category: "General"
+owner: "TopJellyfin"
+artifacts:
+  - "TopJellyfin.dll"
+changelog: "Versión inicial"

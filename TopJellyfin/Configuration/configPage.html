@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>TopJellyfin</title>
+</head>
+<body>
+    <div id="TopJellyfinConfigPage" data-role="page" class="page type-interior pluginConfigurationPage"
+         data-require="emby-input,emby-button,emby-select,emby-checkbox">
+
+        <div data-role="content">
+            <div class="content-primary">
+                <h2>TopJellyfin - Configuración</h2>
+                <p>Configura las secciones personalizadas del inicio y la integración con Trakt.tv</p>
+
+                <div class="verticalSection">
+                    <h3>Trakt.tv</h3>
+                    <div class="inputContainer">
+                        <label class="inputLabel" for="txtTraktClientId">Trakt Client ID</label>
+                        <input is="emby-input" type="text" id="txtTraktClientId"
+                               placeholder="Tu Client ID de Trakt.tv" />
+                        <div class="fieldDescription">
+                            Obtén tu Client ID en <a href="https://trakt.tv/oauth/applications" target="_blank">trakt.tv/oauth/applications</a>
+                        </div>
+                    </div>
+
+                    <div class="inputContainer">
+                        <label class="inputLabel" for="selectMoviesEndpoint">Tipo de ranking de películas</label>
+                        <select is="emby-select" id="selectMoviesEndpoint">
+                            <option value="trending">Trending (más vistos ahora)</option>
+                            <option value="popular">Popular (más populares)</option>
+                        </select>
+                    </div>
+
+                    <div class="inputContainer">
+                        <label class="inputLabel" for="selectShowsEndpoint">Tipo de ranking de series</label>
+                        <select is="emby-select" id="selectShowsEndpoint">
+                            <option value="trending">Trending (más vistos ahora)</option>
+                            <option value="popular">Popular (más populares)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="verticalSection">
+                    <h3>Opciones generales</h3>
+
+                    <div class="inputContainer">
+                        <label class="inputLabel" for="txtCacheDuration">Duración de caché (minutos)</label>
+                        <input is="emby-input" type="number" id="txtCacheDuration" min="5" max="1440" />
+                    </div>
+
+                    <div class="inputContainer">
+                        <label class="inputLabel" for="txtRecentDays">Días para "recientemente estrenado"</label>
+                        <input is="emby-input" type="number" id="txtRecentDays" min="7" max="365" />
+                    </div>
+
+                    <div class="inputContainer">
+                        <label class="inputLabel" for="txtMaxItems">Máximo de elementos por sección</label>
+                        <input is="emby-input" type="number" id="txtMaxItems" min="5" max="50" />
+                    </div>
+                </div>
+
+                <div class="verticalSection">
+                    <h3>Secciones activas</h3>
+
+                    <div class="checkboxContainer">
+                        <label>
+                            <input is="emby-checkbox" type="checkbox" id="chkRecentMovies" />
+                            <span>Recientemente estrenado en Películas</span>
+                        </label>
+                    </div>
+
+                    <div class="checkboxContainer">
+                        <label>
+                            <input is="emby-checkbox" type="checkbox" id="chkRecentSeries" />
+                            <span>Recientemente estrenado en Series</span>
+                        </label>
+                    </div>
+
+                    <div class="checkboxContainer">
+                        <label>
+                            <input is="emby-checkbox" type="checkbox" id="chkTopMovies" />
+                            <span>Top Películas (Trakt.tv)</span>
+                        </label>
+                    </div>
+
+                    <div class="checkboxContainer">
+                        <label>
+                            <input is="emby-checkbox" type="checkbox" id="chkTopSeries" />
+                            <span>Top Series (Trakt.tv)</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div>
+                    <button is="emby-button" type="button" class="raised button-submit block"
+                            onclick="TopJellyfinConfig.save();">
+                        <span>Guardar</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <script type="text/javascript">
+            var TopJellyfinConfig = {
+                pluginId: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890',
+
+                load: function () {
+                    Dashboard.showLoadingMsg();
+                    ApiClient.getPluginConfiguration(this.pluginId).then(function (config) {
+                        document.getElementById('txtTraktClientId').value = config.TraktClientId || '';
+                        document.getElementById('txtCacheDuration').value = config.CacheDurationMinutes;
+                        document.getElementById('txtRecentDays').value = config.RecentlyReleasedDays;
+                        document.getElementById('txtMaxItems').value = config.MaxItemsPerSection;
+                        document.getElementById('selectMoviesEndpoint').value = config.TraktMoviesEndpoint || 'trending';
+                        document.getElementById('selectShowsEndpoint').value = config.TraktShowsEndpoint || 'trending';
+                        document.getElementById('chkRecentMovies').checked = config.EnableRecentMovies;
+                        document.getElementById('chkRecentSeries').checked = config.EnableRecentSeries;
+                        document.getElementById('chkTopMovies').checked = config.EnableTopMovies;
+                        document.getElementById('chkTopSeries').checked = config.EnableTopSeries;
+                        Dashboard.hideLoadingMsg();
+                    });
+                },
+
+                save: function () {
+                    Dashboard.showLoadingMsg();
+                    ApiClient.getPluginConfiguration(this.pluginId).then(function (config) {
+                        config.TraktClientId = document.getElementById('txtTraktClientId').value;
+                        config.CacheDurationMinutes = parseInt(document.getElementById('txtCacheDuration').value, 10);
+                        config.RecentlyReleasedDays = parseInt(document.getElementById('txtRecentDays').value, 10);
+                        config.MaxItemsPerSection = parseInt(document.getElementById('txtMaxItems').value, 10);
+                        config.TraktMoviesEndpoint = document.getElementById('selectMoviesEndpoint').value;
+                        config.TraktShowsEndpoint = document.getElementById('selectShowsEndpoint').value;
+                        config.EnableRecentMovies = document.getElementById('chkRecentMovies').checked;
+                        config.EnableRecentSeries = document.getElementById('chkRecentSeries').checked;
+                        config.EnableTopMovies = document.getElementById('chkTopMovies').checked;
+                        config.EnableTopSeries = document.getElementById('chkTopSeries').checked;
+
+                        ApiClient.updatePluginConfiguration(TopJellyfinConfig.pluginId, config).then(function () {
+                            Dashboard.processPluginConfigurationUpdateResult();
+                        });
+                    });
+                }
+            };
+
+            document.querySelector('#TopJellyfinConfigPage')
+                .addEventListener('pageshow', function () {
+                    TopJellyfinConfig.load();
+                });
+        </script>
+    </div>
+</body>
+</html>
