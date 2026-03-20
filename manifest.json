@@ -1,0 +1,20 @@
+[
+  {
+    "guid": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+    "name": "TopJellyfin",
+    "description": "Añade secciones personalizadas al inicio: Recientemente estrenado en Películas/Series y Top Películas/Series desde Trakt.tv",
+    "overview": "Secciones de inicio personalizadas con Trakt.tv",
+    "owner": "pincharo",
+    "category": "General",
+    "versions": [
+      {
+        "version": "1.0.0.0",
+        "changelog": "Versión inicial",
+        "targetAbi": "10.10.0.0",
+        "sourceUrl": "https://github.com/pincharo/TopJellyfin/releases/download/v1.0.0/TopJellyfin_1.0.0.zip",
+        "checksum": "",
+        "timestamp": "2026-03-20T00:00:00Z"
+      }
+    ]
+  }
+]
